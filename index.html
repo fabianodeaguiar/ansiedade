@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Ansiedade</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #challenge {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function startChallenge() {
+            // Gere operações matemáticas aleatórias
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const num3 = Math.floor(Math.random() * 10) + 1;
+
+            // Exiba as operações para o usuário
+            const challengeElement = document.getElementById('challenge');
+            challengeElement.textContent = `Resolva as seguintes operações em 15 segundos: ${num1} + ${num2} + ${num3}`;
+
+            // Defina um temporizador para 15 segundos
+            setTimeout(function() {
+                endChallenge(false);
+            }, 15000);
+        }
+
+        function endChallenge(success) {
+            const resultElement = document.getElementById('result');
+            if (success) {
+                resultElement.textContent = 'Parabéns! Você conseguiu concluir as 3 operações. Deseja realizar novamente?';
+            } else {
+                resultElement.textContent = 'Não foi dessa vez, mas continue tentando.';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Desafio de Ansiedade</h1>
+    <div id="challenge"></div>
+    <button onclick="startChallenge()">Iniciar Desafio</button>
+    <div id="result"></div>
+</body>
+</html>
