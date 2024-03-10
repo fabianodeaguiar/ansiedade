@@ -16,12 +16,6 @@
             margin-bottom: 20px;
         }
 
-        #result {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-
         #answer {
             margin-top: 10px;
             font-size: 16px;
@@ -31,24 +25,38 @@
             margin-top: 20px;
             font-size: 18px;
         }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Adiciona a classe hidden para esconder elementos */
+        .hidden {
+            display: none;
+        }
     </style>
     <script>
         let currentChallenge = 1;
 
         function startChallenge() {
             showChallenge();
-            updateTimer(15);
+            
+            // Define um temporizador para 15 segundos
+            let secondsLeft = 15;
+            updateTimer(secondsLeft);
 
             // Atualiza o termômetro a cada segundo
             const timerInterval = setInterval(function() {
-                updateTimer();
-            }, 1000);
+                secondsLeft--;
+                updateTimer(secondsLeft);
 
-            // Define um temporizador para 15 segundos
-            setTimeout(function() {
-                endChallenge(false);
-                clearInterval(timerInterval);
-            }, 15000);
+                if (secondsLeft === 0) {
+                    endChallenge(false);
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
         }
 
         function showChallenge() {
@@ -61,6 +69,10 @@
 
             const answerElement = document.getElementById('answer');
             answerElement.innerHTML = '<input type="text" id="userAnswer">';
+            
+            // Esconde o botão "Iniciar Desafio" e mostra o botão "Verificar Resposta"
+            document.getElementById('startButton').classList.add('hidden');
+            document.getElementById('checkAnswerButton').classList.remove('hidden');
         }
 
         function checkAnswer() {
@@ -79,22 +91,23 @@
                     endChallenge(true);
                 }
             } else {
-                endChallenge(false);
+                // Não faz nada aqui, a validação ocorre apenas no final do tempo
             }
-        }
-
-        function updateTimer(secondsLeft = 15) {
-            const timerElement = document.getElementById('timer');
-            timerElement.textContent = `Tempo restante: ${secondsLeft}s`;
         }
 
         function endChallenge(success) {
             const resultElement = document.getElementById('result');
-            if (success) {
-                resultElement.textContent = 'Parabéns! Você concluiu as 3 operações. Deseja realizar novamente?';
-            } else {
+            if (!success) {
                 resultElement.textContent = 'Não foi dessa vez, mas continue tentando.';
             }
+            // Esconde o botão "Verificar Resposta" e mostra o botão "Iniciar Desafio"
+            document.getElementById('checkAnswerButton').classList.add('hidden');
+            document.getElementById('startButton').classList.remove('hidden');
+        }
+
+        function updateTimer(secondsLeft) {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `Tempo restante: ${secondsLeft}s`;
         }
     </script>
 </head>
@@ -102,13 +115,10 @@
     <h1>Desafio de Ansiedade</h1>
     <div id="challenge"></div>
     <div id="answer"></div>
-    <button onclick="checkAnswer()">Verificar Resposta</button>
+    <!-- Adiciona a classe hidden para esconder os botões -->
+    <button id="checkAnswerButton" class="hidden" onclick="checkAnswer()">Verificar Resposta</button>
     <div id="timer">Tempo restante: 15s</div>
     <div id="result"></div>
-    <button onclick="startChallenge()">Iniciar Desafio</button>
-</body>
-</html>
-    <div id="result"></div>
-    <button onclick="startChallenge()">Iniciar Desafio</button>
+    <button id="startButton" onclick="startChallenge()">Iniciar Desafio</button>
 </body>
 </html>
