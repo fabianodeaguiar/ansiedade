@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Ansiedade</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        #challenge {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        #answer {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        #timer {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Adiciona a classe hidden para esconder elementos */
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        let currentChallenge = 1;
+        let timerInterval;
+
+        function startChallenge() {
+            showChallenge();
+            
+            // Define um temporizador para 15 segundos
+            let secondsLeft = 15;
+            updateTimer(secondsLeft);
+
+            // Atualiza o termômetro a cada segundo
+            timerInterval = setInterval(function() {
+                secondsLeft--;
+                updateTimer(secondsLeft);
+
+                if (secondsLeft === 0) {
+                    endChallenge(false);
+                }
+            }, 1000);
+        }
+
+        function showChallenge() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            const num3 = Math.floor(Math.random() * 10) + 1;
+
+            const challengeElement = document.getElementById('challenge');
+            challengeElement.textContent = `Resolva a operação ${num1} + ${num2} + ${num3}:`;
+
+            const answerElement = document.getElementById('answer');
+            answerElement.innerHTML = '<input type="text" id="userAnswer">';
+            
+            // Esconde o botão "Iniciar Desafio" e mostra o botão "Verificar Resposta"
+            document.getElementById('startButton').classList.add('hidden');
+            document.getElementById('checkAnswerButton').classList.remove('hidden');
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('userAnswer').value);
+            const num1 = parseInt(document.getElementById('challenge').textContent.split('+')[0].trim());
+            const num2 = parseInt(document.getElementById('challenge').textContent.split('+')[1].trim());
+            const num3 = parseInt(document.getElementById('challenge').textContent.split('+')[2].trim());
+
+            const correctAnswer = num1 + num2 + num3;
+
+            if (userAnswer === correctAnswer) {
+                if (currentChallenge < 3) {
+                    currentChallenge++;
+                    showChallenge();
+                } else {
+                    endChallenge(true);
+                }
+            } else {
+                // Não faz nada aqui, a validação ocorre apenas no final do tempo
+            }
+        }
+
+        function endChallenge(success) {
+            clearInterval(timerInterval);  // Para o temporizador
+
+            const resultElement = document.getElementById('result');
+            if (!success) {
+                resultElement.textContent = 'Não foi dessa vez, mas continue tentando.';
+            }
+            // Esconde o botão "Verificar Resposta" e mostra o botão "Iniciar Desafio"
+            document.getElementById('checkAnswerButton').classList.add('hidden');
+            document.getElementById('startButton').classList.remove('hidden');
+        }
+
+        function updateTimer(secondsLeft) {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `Tempo restante: ${secondsLeft}s`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Desafio de Ansiedade</h1>
+    <div id="challenge"></div>
+    <div id="answer"></div>
+    <!-- Adiciona a classe hidden para esconder os botões -->
+    <button id="checkAnswerButton" class="hidden" onclick="checkAnswer()">Verificar Resposta</button>
+    <div id="timer">Tempo restante: 15s</div>
+    <div id="result"></div>
+    <button id="startButton" onclick="startChallenge()">Iniciar Desafio</button>
+</body>
+</html>
